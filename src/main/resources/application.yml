@@ -1,0 +1,23 @@
+server:
+  servlet:
+    context-path: /flysix
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    url: jdbc:mysql://localhost:3306/flysixDB?createDatabaseIfNotExist=true
+    password: 9696
+  jpa:
+    hibernate:
+      ddl-auto: update
+    defer-datasource-initialization: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect
+  sql:
+    init:
+      mode: always
+
+  main:
+    allow-circular-references: true
