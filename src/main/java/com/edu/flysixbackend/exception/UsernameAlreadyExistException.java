@@ -1,2 +1,8 @@
-package com.edu.flysixbackend.exception;public class UsernameAlreadyExistException {
+package com.edu.flysixbackend.exception;
+
+public class UsernameAlreadyExistException extends Exception{
+
+    public UsernameAlreadyExistException(String message) {
+        super(message);
+    }
 }

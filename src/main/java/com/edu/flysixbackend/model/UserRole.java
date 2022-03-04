@@ -12,8 +12,8 @@ public class UserRole {
     private Long roleId;
     private String roleName;
 
-    @OneToMany(mappedBy = "role")
-    private List<User> userList = new ArrayList<>();
+//    @OneToMany(mappedBy = "role")
+//    private List<User> userList = new ArrayList<>();
 
     public UserRole() {
     }
@@ -34,11 +34,11 @@ public class UserRole {
         this.roleName = roleName;
     }
 
-    public List<User> getUserList() {
-        return userList;
-    }
-
-    public void setUserList(List<User> userList) {
-        this.userList = userList;
-    }
+//    public List<User> getUserList() {
+//        return userList;
+//    }
+//
+//    public void setUserList(List<User> userList) {
+//        this.userList = userList;
+//    }
 }
