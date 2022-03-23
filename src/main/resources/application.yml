@@ -21,3 +21,6 @@ spring:
 
   main:
     allow-circular-references: true
+
+stripe:
+  apiKey: sk_test_XXiQh8dGMkNRYTqrC6p2tXx0002jYnF074
