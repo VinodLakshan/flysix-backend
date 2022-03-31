@@ -1,61 +1,44 @@
 package com.edu.flysixbackend.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Objects;
 
 @Entity
-public class Airport {
+public class Airport implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long airportId;
-    private String airportNo;
-    private String name;
-    private String country;
-    private String city;
+    @Column(length = 10)
+    private String id;
+    private String label;
 
     public Airport() {
     }
 
-    public Long getAirportId() {
-        return airportId;
+    public String getId() {
+        return id;
     }
 
-    public void setAirportId(Long airportId) {
-        this.airportId = airportId;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public String getAirportNo() {
-        return airportNo;
+    public String getLabel() {
+        return label;
     }
 
-    public void setAirportNo(String airportNo) {
-        this.airportNo = airportNo;
+    public void setLabel(String label) {
+        this.label = label;
     }
 
-    public String getName() {
-        return name;
+    @Override
+    public boolean equals(Object obj) {
+        Airport otherAirport = (Airport) obj;
+        return this.id.equalsIgnoreCase(otherAirport.getId());
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

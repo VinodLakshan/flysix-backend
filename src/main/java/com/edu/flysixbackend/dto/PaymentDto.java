@@ -2,19 +2,28 @@ package com.edu.flysixbackend.dto;
 
 public class PaymentDto {
 
+    private Long bookingId;
     private String currency;
-    private Long price;
+    private Double price;
     private String successUrl;
     private String cancelUrl;
 
     public PaymentDto() {
     }
 
-    public Long getPrice() {
+    public Long getBookingId() {
+        return bookingId;
+    }
+
+    public void setBookingId(Long bookingId) {
+        this.bookingId = bookingId;
+    }
+
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(Long price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 

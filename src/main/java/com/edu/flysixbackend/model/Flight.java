@@ -1,32 +1,24 @@
 package com.edu.flysixbackend.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
 
 @Entity
-public class Flight {
+public class Flight implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long flightId;
-    private String flightNo;
-    private String arrivalAt;
-    private String departureAt;
 
     @ManyToOne
     private Airline airline;
 
-    @ManyToOne
-    private Airport arrivalAirport;
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Itinerary departTrip;
 
-    @ManyToOne
-    private Airport departureAirport;
-
-    @ManyToMany
-    private List<Airport> transitAirports;
-
-    @OneToMany(mappedBy = "flight")
-    private List<Reservation> reservations;
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Itinerary returnTrip;
 
     public Flight() {
     }
@@ -39,30 +31,6 @@ public class Flight {
         this.flightId = flightId;
     }
 
-    public String getFlightNo() {
-        return flightNo;
-    }
-
-    public void setFlightNo(String flightNo) {
-        this.flightNo = flightNo;
-    }
-
-    public String getArrivalAt() {
-        return arrivalAt;
-    }
-
-    public void setArrivalAt(String arrivalAt) {
-        this.arrivalAt = arrivalAt;
-    }
-
-    public String getDepartureAt() {
-        return departureAt;
-    }
-
-    public void setDepartureAt(String departureAt) {
-        this.departureAt = departureAt;
-    }
-
     public Airline getAirline() {
         return airline;
     }
@@ -71,35 +39,20 @@ public class Flight {
         this.airline = airline;
     }
 
-    public Airport getArrivalAirport() {
-        return arrivalAirport;
+    public Itinerary getDepartTrip() {
+        return departTrip;
     }
 
-    public void setArrivalAirport(Airport arrivalAirport) {
-        this.arrivalAirport = arrivalAirport;
+    public void setDepartTrip(Itinerary departTrip) {
+        this.departTrip = departTrip;
     }
 
-    public Airport getDepartureAirport() {
-        return departureAirport;
+    public Itinerary getReturnTrip() {
+        return returnTrip;
     }
 
-    public void setDepartureAirport(Airport departureAirport) {
-        this.departureAirport = departureAirport;
+    public void setReturnTrip(Itinerary returnTrip) {
+        this.returnTrip = returnTrip;
     }
 
-    public List<Airport> getTransitAirports() {
-        return transitAirports;
-    }
-
-    public void setTransitAirports(List<Airport> transitAirports) {
-        this.transitAirports = transitAirports;
-    }
-
-    public List<Reservation> getReservations() {
-        return reservations;
-    }
-
-    public void setReservations(List<Reservation> reservations) {
-        this.reservations = reservations;
-    }
 }

@@ -24,6 +24,10 @@ public class AuthUserDto implements UserDetails {
         return authorities;
     }
 
+    public Long getUserId() {
+        return user.getUserId();
+    }
+
     public String getName() {
         return user.getName();
     }
@@ -35,6 +39,7 @@ public class AuthUserDto implements UserDetails {
     public String getAddress() {
         return user.getAddress();
     }
+
     public String getMobileNo() {
         return user.getMobileNo();
     }

@@ -1,13 +1,13 @@
 package com.edu.flysixbackend.model;
 
 import javax.persistence.*;
-import java.util.List;
+import java.io.Serializable;
 
 @Entity
 @Table(uniqueConstraints = {
         @UniqueConstraint(columnNames = "username")
 })
-public class User implements Cloneable{
+public class User implements Cloneable, Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,9 +21,6 @@ public class User implements Cloneable{
 
     @ManyToOne
     private UserRole role;
-
-    @OneToMany(mappedBy = "reservedBy")
-    private List<Reservation> reservationList;
 
     public User() {
     }
@@ -92,14 +89,6 @@ public class User implements Cloneable{
 
     public void setAddress(String address) {
         this.address = address;
-    }
-
-    public List<Reservation> getReservationList() {
-        return reservationList;
-    }
-
-    public void setReservationList(List<Reservation> reservationList) {
-        this.reservationList = reservationList;
     }
 
     public UserRole getRole() {
