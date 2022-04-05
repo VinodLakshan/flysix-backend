@@ -32,7 +32,7 @@ spring:
     username: everythingneox16@gmail.com
     host: smtp.gmail.com
     protocol: smtp
-    password: NEOx16Everything
+    password: *****
     port: 587
 
 stripe:
