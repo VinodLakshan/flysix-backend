@@ -4,4 +4,6 @@ import com.edu.flysixbackend.model.Booking;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface BookingRepository extends JpaRepository<Booking, Long> {
+
+    Booking findByBookingIdAndBookingTypeEquals(Long bookingId, String bookingType);
 }

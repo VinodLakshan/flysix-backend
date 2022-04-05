@@ -7,4 +7,6 @@ public interface BookingService {
 
     Booking saveBooking(BookingDto bookingDto);
     Booking findBooking(Long bookingId);
+    boolean confirmBooking(Long bookingId);
+    Booking findUnconfirmedOnHoldBooking(Long bookingId) throws Exception;
 }

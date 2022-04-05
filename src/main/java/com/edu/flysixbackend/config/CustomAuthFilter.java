@@ -29,7 +29,8 @@ public class CustomAuthFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-        if (request.getServletPath().startsWith("/auth")) {
+        if (request.getServletPath().startsWith("/auth")
+                || request.getServletPath().equalsIgnoreCase("/payment/webhook")) {
             filterChain.doFilter(request, response);
 
         } else {

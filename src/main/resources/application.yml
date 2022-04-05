@@ -22,5 +22,19 @@ spring:
   main:
     allow-circular-references: true
 
+  mail:
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: 'true'
+          auth: 'true'
+    username: everythingneox16@gmail.com
+    host: smtp.gmail.com
+    protocol: smtp
+    password: NEOx16Everything
+    port: 587
+
 stripe:
   apiKey: sk_test_XXiQh8dGMkNRYTqrC6p2tXx0002jYnF074
+  endpoint-secret: whsec_ca8525e0e69037e7864397175bfeae12b8ea51755f8b01bcac0916ddf089832c

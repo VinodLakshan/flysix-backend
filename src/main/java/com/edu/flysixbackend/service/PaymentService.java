@@ -2,12 +2,14 @@ package com.edu.flysixbackend.service;
 
 import com.edu.flysixbackend.dto.PaymentDto;
 import com.stripe.exception.StripeException;
+import com.stripe.model.checkout.Session;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public interface PaymentService {
 
-    String makePayment(PaymentDto paymentDto) throws StripeException;
+    Session createPaymentSession(PaymentDto paymentDto) throws StripeException;
 
-    boolean confirmPayment(Long bookingId);
+    Object webhook(HttpServletRequest request, HttpServletResponse response, String payload);
 }

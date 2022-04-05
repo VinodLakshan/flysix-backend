@@ -5,18 +5,28 @@ import com.edu.flysixbackend.dto.PaymentDto;
 import com.edu.flysixbackend.model.Booking;
 import com.edu.flysixbackend.repository.BookingRepository;
 import com.edu.flysixbackend.repository.PaymentRepository;
+import com.edu.flysixbackend.service.BookingService;
 import com.edu.flysixbackend.service.PaymentService;
 import com.stripe.Stripe;
+import com.stripe.exception.SignatureVerificationException;
 import com.stripe.exception.StripeException;
+import com.stripe.model.Event;
+import com.stripe.model.EventDataObjectDeserializer;
+import com.stripe.model.StripeObject;
 import com.stripe.model.checkout.Session;
+import com.stripe.net.Webhook;
 import com.stripe.param.checkout.SessionCreateParams;
 import lombok.extern.slf4j.Slf4j;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -25,17 +35,25 @@ public class PaymentServiceImpl implements PaymentService {
     @Value("${stripe.apiKey}")
     private String apiKey;
 
+    @Value("${stripe.endpoint-secret}")
+    private String endpointSecret;
+
     @Autowired
     private BookingRepository bookingRepository;
 
+    @Autowired
+    private BookingService bookingService;
+
     @Override
-    public String makePayment(PaymentDto paymentDto) throws StripeException {
+    public Session createPaymentSession(PaymentDto paymentDto) throws StripeException {
 
         Stripe.apiKey = apiKey;
 
         SessionCreateParams params = SessionCreateParams.builder()
                 .setMode(SessionCreateParams.Mode.PAYMENT)
-                .setSuccessUrl(paymentDto.getSuccessUrl())
+                .setClientReferenceId(paymentDto.getBookingId().toString())
+                .setSuccessUrl(paymentDto.getSuccessUrl() + "?bookingId=" + paymentDto.getBookingId() +
+                        "&type=" + Const.BOOKING_CONFIRMED)
                 .setCancelUrl(paymentDto.getCancelUrl())
                 .addLineItem(
                         SessionCreateParams.LineItem.builder()
@@ -52,29 +70,38 @@ public class PaymentServiceImpl implements PaymentService {
                                 .build())
                 .build();
 
-        Session session = Session.create(params);
-        return session.getUrl();
-
+        return Session.create(params);
     }
 
     @Override
-    public boolean confirmPayment(Long bookingId) {
+    public Object webhook(HttpServletRequest request, HttpServletResponse response, String payload) {
 
-        Booking booking = bookingRepository.findById(bookingId).orElse(null);
+        Stripe.apiKey = apiKey;
+        String sigHeader = request.getHeader("Stripe-Signature");
+        Event event = null;
 
-        if (booking.getPayment().getStatus().equalsIgnoreCase(Const.PAYMENT_PENDING)) {
+        try {
+            event = Webhook.constructEvent(payload, sigHeader, endpointSecret);
 
-            booking.setStatus(Const.BOOKING_CONFIRMED);
-            booking.getPayment().setStatus(Const.PAYMENT_COMPLETED);
-            booking.getPayment().setDate(new SimpleDateFormat("yyyy-MM-dd")
-                    .format(new Date()));
-            bookingRepository.save(booking);
-            log.info("Payment confirmed for booking ID : " + bookingId);
-
-        } else {
-            log.info("Payment is already confirmed for booking ID : " + bookingId);
+        } catch (SignatureVerificationException e) {
+            response.setStatus(400);
+            return "";
         }
 
-        return true;
+        if ("checkout.session.completed".equals(event.getType())) {
+
+            EventDataObjectDeserializer dataObjectDeserializer = event.getDataObjectDeserializer();
+
+            if (dataObjectDeserializer.getObject().isPresent()) {
+                Session session = (Session) dataObjectDeserializer.getObject().get();
+                bookingService.confirmBooking(Long.parseLong(session.getClientReferenceId()));
+            }
+
+        }
+
+        response.setStatus(200);
+        return "";
+
     }
+
 }
