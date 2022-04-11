@@ -41,7 +41,7 @@ public class BookingServiceImpl implements BookingService {
     private EmailService emailService;
 
     @Override
-    public Booking saveBooking(BookingDto bookingDto) {
+    public Booking saveBooking(BookingDto bookingDto) throws Exception {
 
         Booking booking = new Booking(bookingDto);
 
@@ -67,12 +67,12 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public Booking findBooking(Long bookingId) {
+    public Booking findBooking(Long bookingId) throws Exception {
         return bookingRepository.findById(bookingId).orElse(null);
     }
 
     @Override
-    public boolean confirmBooking(Long bookingId) {
+    public boolean confirmBooking(Long bookingId) throws Exception {
 
         log.info("Booking Id " + bookingId + " is being confirmed.");
         Booking booking = findBooking(bookingId);
@@ -116,6 +116,11 @@ public class BookingServiceImpl implements BookingService {
         } else {
             throw new NotFoundException("Booking not found.");
         }
+    }
+
+    @Override
+    public List<Booking> getBookingForUser(Long userId) throws Exception {
+        return bookingRepository.findByReservedBy_UserId(userId);
     }
 
     private boolean saveAirports(Flight flight) {

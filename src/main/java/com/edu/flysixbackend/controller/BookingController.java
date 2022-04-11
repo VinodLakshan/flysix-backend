@@ -117,5 +117,19 @@ public class BookingController {
         return ResponseEntity.ok("response");
     }
 
+    @GetMapping("/byUser/{userId}")
+    public ResponseEntity<?> getBookingsForUser(@PathVariable Long userId) {
+
+        try {
+            return ResponseEntity.ok(bookingService.getBookingForUser(userId));
+
+        } catch (Exception e) {
+            log.error("Searching for bookings by user failed.");
+            log.error(e.getMessage());
+            return new ResponseEntity<>(new ErrorDto(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 
 }

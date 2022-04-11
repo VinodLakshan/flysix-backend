@@ -94,7 +94,13 @@ public class PaymentServiceImpl implements PaymentService {
 
             if (dataObjectDeserializer.getObject().isPresent()) {
                 Session session = (Session) dataObjectDeserializer.getObject().get();
-                bookingService.confirmBooking(Long.parseLong(session.getClientReferenceId()));
+
+                try {
+                    bookingService.confirmBooking(Long.parseLong(session.getClientReferenceId()));
+
+                } catch (Exception e) {
+                    log.error("Confirm booking error : " + e.getMessage());
+                }
             }
 
         }
