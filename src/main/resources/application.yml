@@ -6,8 +6,8 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
-    url: jdbc:mysql://localhost:3306/flysixDB?createDatabaseIfNotExist=true
-    password: 9696
+    url:
+    password:
   jpa:
     hibernate:
       ddl-auto: update
@@ -21,3 +21,20 @@ spring:
 
   main:
     allow-circular-references: true
+
+  mail:
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: 'true'
+          auth: 'true'
+    username:
+    host: smtp.gmail.com
+    protocol: smtp
+    password:
+    port: 587
+
+stripe:
+  apiKey:
+  endpoint-secret:

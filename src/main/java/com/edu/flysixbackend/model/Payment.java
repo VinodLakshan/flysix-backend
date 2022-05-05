@@ -1,18 +1,18 @@
 package com.edu.flysixbackend.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
-public class Payment {
+public class Payment implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long paymentId;
-    private double amount;
+    private double total;
     private String date;
-
-    @ManyToOne
-    private PaymentType paymentType;
+    private String currency;
+    private String status;
 
     public Payment() {
     }
@@ -25,12 +25,12 @@ public class Payment {
         this.paymentId = paymentId;
     }
 
-    public double getAmount() {
-        return amount;
+    public double getTotal() {
+        return total;
     }
 
-    public void setAmount(double amount) {
-        this.amount = amount;
+    public void setTotal(double price) {
+        this.total = price;
     }
 
     public String getDate() {
@@ -41,11 +41,19 @@ public class Payment {
         this.date = date;
     }
 
-    public PaymentType getPaymentType() {
-        return paymentType;
+    public String getCurrency() {
+        return currency;
     }
 
-    public void setPaymentType(PaymentType paymentType) {
-        this.paymentType = paymentType;
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

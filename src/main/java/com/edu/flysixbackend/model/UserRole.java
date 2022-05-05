@@ -1,19 +1,20 @@
 package com.edu.flysixbackend.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class UserRole {
+public class UserRole implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long roleId;
     private String roleName;
 
-    @OneToMany(mappedBy = "role")
-    private List<User> userList = new ArrayList<>();
+//    @OneToMany(mappedBy = "role")
+//    private List<User> userList = new ArrayList<>();
 
     public UserRole() {
     }
@@ -34,11 +35,11 @@ public class UserRole {
         this.roleName = roleName;
     }
 
-    public List<User> getUserList() {
-        return userList;
-    }
-
-    public void setUserList(List<User> userList) {
-        this.userList = userList;
-    }
+//    public List<User> getUserList() {
+//        return userList;
+//    }
+//
+//    public void setUserList(List<User> userList) {
+//        this.userList = userList;
+//    }
 }

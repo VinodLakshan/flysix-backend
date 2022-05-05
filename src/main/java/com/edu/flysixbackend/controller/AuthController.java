@@ -1,5 +1,7 @@
 package com.edu.flysixbackend.controller;
 
+import com.edu.flysixbackend.dto.ErrorDto;
+import com.edu.flysixbackend.exception.UsernameAlreadyExistException;
 import com.edu.flysixbackend.model.User;
 import com.edu.flysixbackend.service.UserService;
 import com.edu.flysixbackend.util.JwtUtil;
@@ -33,20 +35,17 @@ public class AuthController {
         log.info("User is being registered");
 
         try {
-            User registerUser = userService.registerUser(user);
+            userService.saveUser(user);
+            log.info("User is created");
+            return ResponseEntity.ok(jwtUtil.authenticate(user));
 
-            if(registerUser != null) {
-                log.info("User is created");
-                return ResponseEntity.ok(jwtUtil.authenticate(user));
-
-            }else{
-                log.error("user registration is failed");
-                throw new Exception("User registration is failed");
-            }
+        } catch (UsernameAlreadyExistException e) {
+            log.error(e.getMessage());
+            return new ResponseEntity<>(new ErrorDto(e.getMessage(), HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
 
         } catch (Exception e) {
             log.error(e.getMessage());
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new ErrorDto(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
