@@ -125,9 +125,13 @@ public class BookingServiceImpl implements BookingService {
 
     private boolean saveAirports(Flight flight) {
 
-        List<Segment> allSegments = Stream.concat(flight.getDepartTrip().getSegments().stream(),
-                        flight.getReturnTrip().getSegments().stream())
-                .collect(Collectors.toList());
+        List<Segment> allSegments = flight.getDepartTrip().getSegments();
+
+        if(flight.getReturnTrip() != null) {
+            allSegments = Stream.concat(allSegments.stream(),
+                            flight.getReturnTrip().getSegments().stream())
+                    .collect(Collectors.toList());
+        }
 
         Set<Airport> airports = new HashSet<>();
 
