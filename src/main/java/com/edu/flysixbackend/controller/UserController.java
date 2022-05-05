@@ -3,11 +3,14 @@ package com.edu.flysixbackend.controller;
 import com.edu.flysixbackend.dto.ErrorDto;
 import com.edu.flysixbackend.model.User;
 import com.edu.flysixbackend.service.UserService;
+import com.edu.flysixbackend.util.JwtUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/user")
@@ -17,6 +20,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private JwtUtil jwtUtil;
 
     @DeleteMapping
     public ResponseEntity<?> deleteUser(@RequestBody User user) {
@@ -38,9 +44,9 @@ public class UserController {
         log.info("User is being updated");
 
         try {
-            User updatedUser = userService.updateUser(user);
+            userService.updateUser(user);
             log.info("User is being updated");
-            return ResponseEntity.ok(updatedUser);
+            return ResponseEntity.ok(jwtUtil.authenticate(user));
 
         } catch (Exception e) {
             log.error(e.getMessage());
