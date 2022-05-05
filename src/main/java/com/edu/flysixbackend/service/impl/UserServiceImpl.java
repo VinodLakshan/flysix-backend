@@ -40,12 +40,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public User saveUser(User user) throws Exception {
 
         if (!this.isUsernameAlreadyExists(user.getUsername())) {
-
-            User clonedUser = (User) user.clone();
-            clonedUser.setPassword(passwordEncoder.encode(user.getPassword()));
-            User savedUser = userRepository.saveAndFlush(clonedUser);
-            if (savedUser != null) savedUser.setRole(roleRepository.getById(savedUser.getRole().getRoleId()));
-            return savedUser;
+            return saveUserDB(user);
 
         } else {
             throw new UsernameAlreadyExistException("Username is already taken!");
@@ -54,11 +49,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public User updateUser(User user) throws Exception {
-        User clonedUser = (User) user.clone();
-        clonedUser.setPassword(passwordEncoder.encode(user.getPassword()));
-        User savedUser = userRepository.saveAndFlush(clonedUser);
-        if (savedUser != null) savedUser.setRole(roleRepository.getById(savedUser.getRole().getRoleId()));
-        return savedUser;
+        return saveUserDB(user);
     }
 
     @Override
@@ -94,5 +85,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         log.info("User found by username");
         return new AuthUserDto(userByUsername);
 
+    }
+
+    private User saveUserDB(User user) throws CloneNotSupportedException {
+        User clonedUser = (User) user.clone();
+        clonedUser.setPassword(passwordEncoder.encode(user.getPassword()));
+        User savedUser = userRepository.saveAndFlush(clonedUser);
+        if (savedUser != null) savedUser.setRole(roleRepository.getById(savedUser.getRole().getRoleId()));
+        return savedUser;
     }
 }
