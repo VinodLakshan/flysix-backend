@@ -11,4 +11,10 @@ public final class Const {
 
     public static final String BOOKING_TYPE_INSTANT = "Instant";
     public static final String BOOKING_TYPE_HOLD_FOR_FREE = "HoldForFree";
+
+    public static final String BOOKING_CLASS_ECONOMY = "Economy";
+
+    public static final String TRIP_TYPE_ROUND = "Round Trip";
+
+
 }
